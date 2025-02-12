@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat em Tempo Real</title>
+</head>
+<body>
+    <h1>Página de Chat</h1>
+    <div id="messages" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll;"></div>
+    <input id="message-input" placeholder="Digite sua mensagem..." style="width: 80%;">
+    <button id="send-button">Enviar</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        const sendButton = document.getElementById('send-button');
+        const messageInput = document.getElementById('message-input');
+        const messagesDiv = document.getElementById('messages');
+
+        sendButton.onclick = function() {
+            const message = messageInput.value;
+            socket.emit('message', message);
+            messageInput.value = '';
+        };
+
+        socket.on('message', function(message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the bottom
+        });
+    </script>
+
+</body>
+</html>
