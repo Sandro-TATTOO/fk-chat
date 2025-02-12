@@ -4,8 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat em Tempo Real</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body>
     <h1>Bem-vindo ao Chat em Tempo Real</h1>
+    <input type="text" id="nickname" placeholder="Digite seu apelido" />
+    <button id="joinChat">Entrar no Chat</button>
+    <video id="video" width="640" height="480" autoplay></video>
+    <script>
+        const video = document.getElementById('video');
+        const socket = io();
+        const nicknameInput = document.getElementById('nickname');
+        const joinChatButton = document.getElementById('joinChat');
+
+        joinChatButton.onclick = () => {
+            const nickname = nicknameInput.value;
+            socket.emit('set_nickname', nickname); // Envia o apelido para o servidor
+        };
+
+        // Captura o vídeo da câmera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                const mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start(1000); // Captura a cada segundo
+
+                mediaRecorder.ondataavailable = event => {
+                    const imageBlob = event.data;
+                    socket.emit('image', imageBlob); // Envia a imagem para o servidor
+                };
+            })
+            .catch(error => {
+                console.error("Erro ao acessar a câmera: ", error);
+            });
+    </script>
 </body>
+
 </html>

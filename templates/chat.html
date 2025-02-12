@@ -6,7 +6,7 @@
     <title>Chat em Tempo Real</title>
 </head>
 <body>
-    <h1>Página de Chat</h1>
+    <h1>Página de Chat-pro</h1>
     <div id="messages" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll;"></div>
     <input id="message-input" placeholder="Digite sua mensagem..." style="width: 80%;">
     <button id="send-button">Enviar</button>
@@ -14,6 +14,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script>
         const socket = io();
+        let nickname = ''; // Variável para armazenar o apelido
+
+        // Recebe o apelido do servidor
+        socket.on('nickname', function(nick) {
+            nickname = nick; // Armazena o apelido
+        });
 
         const sendButton = document.getElementById('send-button');
         const messageInput = document.getElementById('message-input');
@@ -21,7 +27,7 @@
 
         sendButton.onclick = function() {
             const message = messageInput.value;
-            socket.emit('message', message);
+            socket.emit('message', `${nickname}: ${message}`); // Envia a mensagem com o apelido
             messageInput.value = '';
         };
 
