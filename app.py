@@ -15,7 +15,8 @@ def home():
 
 
 @app.route('/chat')
-@app.route('/chat/')
+@app.route('/chat/pro')
+
 
 def chat():
     return render_template('chat.html')
