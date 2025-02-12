@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat em Tempo Real</title>
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
 </head>
 <body>
     <h1>Bem-vindo ao Chat em Tempo Real</h1>
@@ -12,14 +12,20 @@
     <button id="joinChat">Entrar no Chat</button>
     <video id="video" width="640" height="480" autoplay></video>
     <script>
-        const video = document.getElementById('video');
         const socket = io();
+        const video = document.getElementById('video');
+
         const nicknameInput = document.getElementById('nickname');
         const joinChatButton = document.getElementById('joinChat');
 
         joinChatButton.onclick = () => {
-            const nickname = nicknameInput.value;
-            socket.emit('set_nickname', nickname); // Envia o apelido para o servidor
+            const nickname = nicknameInput.value.trim();
+            if (nickname) {
+                sessionStorage.setItem('nickname', nickname); // Armazena o apelido na sessão
+                socket.emit('set_nickname', nickname); // Envia o apelido para o servidor
+            } else {
+                alert('Por favor, insira um apelido válido.');
+            }
         };
 
         // Captura o vídeo da câmera
@@ -39,5 +45,4 @@
             });
     </script>
 </body>
-
 </html>

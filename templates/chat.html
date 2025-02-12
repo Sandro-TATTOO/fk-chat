@@ -6,7 +6,10 @@
     <title>Chat em Tempo Real</title>
 </head>
 <body>
-    <h1>Página de Chat-pro</h1>
+    <h1>Página de Chat</h1>
+    <input id="nickname" placeholder="Digite seu apelido..." style="width: 80%;">
+    <button id="set-nickname-button">Definir Apelido</button>
+
     <div id="messages" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll;"></div>
     <input id="message-input" placeholder="Digite sua mensagem..." style="width: 80%;">
     <button id="send-button">Enviar</button>
@@ -16,10 +19,14 @@
         const socket = io();
         let nickname = ''; // Variável para armazenar o apelido
 
-        // Recebe o apelido do servidor
-        socket.on('nickname', function(nick) {
-            nickname = nick; // Armazena o apelido
-        });
+        // Solicita o apelido ao carregar a página
+        nickname = prompt("Por favor, insira seu apelido:");
+
+        if (nickname) {
+            socket.emit('set_nickname', nickname); // Envia o apelido para o servidor
+        } else {
+            alert('Por favor, insira um apelido válido.');
+        }
 
         const sendButton = document.getElementById('send-button');
         const messageInput = document.getElementById('message-input');

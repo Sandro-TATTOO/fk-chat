@@ -1,17 +1,21 @@
-from flask import Flask, render_template
-from flask_socketio import SocketIO
+from flask import Flask, render_template, redirect
+
 from socketio_app import socketio  # Importando o objeto socketio
 from socket_handler import handle_message
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+
+# Associando a instância do SocketIO à aplicação Flask
+socketio.init_app(app)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return redirect('/chat')  # Redireciona diretamente para a página de chat
+
+
 
 @app.route('/chat')
-@app.route('/chat/pro')
+@app.route('/chat/')
 
 def chat():
     return render_template('chat.html')

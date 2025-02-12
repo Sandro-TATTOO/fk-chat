@@ -1,4 +1,5 @@
 from flask_socketio import emit
+from flask import request
 from socketio_app import socketio  # Importando o objeto socketio
 
 def handle_message(message):
@@ -7,7 +8,7 @@ def handle_message(message):
 @socketio.on('set_nickname')
 def set_nickname(nickname):
     emit('nickname', nickname, broadcast=True)
-
+    emit('nickname_set', {'status': 'success', 'nickname': nickname}, room=request.sid)  # Notify the client that the nickname has been set
 
 @socketio.on('image')
 def handle_image(image_blob):
